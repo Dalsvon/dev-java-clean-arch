@@ -16,7 +16,12 @@ public class Task {
 
     public String getId() { return id; }
     public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
+    public void setTitle(String title) {
+        if (title == null || title.trim().isEmpty()) {
+            throw new IllegalArgumentException("Title cannot be empty");
+        }
+        this.title = title;
+    }
     public boolean isCompleted() { return completed; }
     public void toggleCompleted() { this.completed = !this.completed; }
 }
