@@ -24,4 +24,9 @@ public class Task {
     }
     public boolean isCompleted() { return completed; }
     public void toggleCompleted() { this.completed = !this.completed; }
+    public Task copy() {
+        Task task = new Task(getId(), getTitle());
+        task.completed = completed;
+        return task;
+    }
 }

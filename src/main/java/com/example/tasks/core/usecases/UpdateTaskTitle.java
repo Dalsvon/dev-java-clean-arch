@@ -35,10 +35,6 @@ public class UpdateTaskTitle {
         task.setTitle(title);
         repo.save(task);
 
-        Task safeCopy = new Task(task.getId(), task.getTitle());
-        if (task.isCompleted()) {
-            safeCopy.toggleCompleted();
-        }
-        return safeCopy;
+        return task.copy();
     }
 }
