@@ -15,6 +15,8 @@ public class ListAllTasksTest {
     private TaskRepository repo;
     private ListAllTasks useCase;
 
+    private String title = "Title1";
+
     @BeforeEach
     void setUp() {
         repo = new InMemoryTaskRepository();
@@ -37,7 +39,7 @@ public class ListAllTasksTest {
         List<Task> tasks = useCase.execute();
         assertEquals(3, tasks.size());
         assertTrue(tasks.stream().anyMatch(t -> t.getId().equals("1")));
-        assertTrue(tasks.stream().anyMatch(t -> t.getTitle().equals("Title1")));
+        assertTrue(tasks.stream().anyMatch(t -> t.getTitle().equals(title)));
         assertTrue(tasks.stream().anyMatch(t -> t.getId().equals("42")));
         assertTrue(tasks.stream().anyMatch(t -> t.getId().equals("String")));
         assertEquals(3, repo.findAll().size());
@@ -50,12 +52,12 @@ public class ListAllTasksTest {
         List<Task> tasks = useCase.execute();
         assertEquals(1, tasks.size());
         assertEquals("1", tasks.get(0).getId());
-        assertEquals("Title1", tasks.get(0).getTitle());
+        assertEquals(title, tasks.get(0).getTitle());
         assertFalse(tasks.get(0).isCompleted());
         assertEquals(1, repo.findAll().size());
 
         assertTrue(repo.findById("1").isPresent());
-        assertEquals("Title1", repo.findById("1").get().getTitle());
+        assertEquals(title, repo.findById("1").get().getTitle());
         assertFalse(repo.findById("1").get().isCompleted());
     }
 
@@ -74,13 +76,11 @@ public class ListAllTasksTest {
     void listAllTasks_tasksFound_returnsUnmodifiableTest() {
         repo.save(TaskTestFactory.taskWithId1());
 
-        List<Task> tasks = useCase.execute();
+        assertThrows(UnsupportedOperationException.class,
+                () -> useCase.execute().add(TaskTestFactory.taskCompleted()));
 
         assertThrows(UnsupportedOperationException.class,
-                () -> tasks.add(TaskTestFactory.taskCompleted()));
-
-        assertThrows(UnsupportedOperationException.class,
-                () -> tasks.remove(TaskTestFactory.taskWithId1()));
+                () -> useCase.execute().remove(TaskTestFactory.taskWithId1()));
     }
 
     @Test
@@ -94,7 +94,7 @@ public class ListAllTasksTest {
 
         Task fromRepo = repo.findById("1").orElseThrow();
 
-        assertEquals("Title1", fromRepo.getTitle());
+        assertEquals(title, fromRepo.getTitle());
     }
 
     @Test
