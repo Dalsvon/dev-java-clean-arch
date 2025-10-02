@@ -6,6 +6,8 @@ import com.example.tasks.infrastructure.InMemoryTaskRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UpdateTaskTitleTest {
@@ -62,6 +64,19 @@ public class UpdateTaskTitleTest {
             useCase.execute(null, "Title");
         });
         assertEquals("Task ID is required", exception.getMessage());
+    }
+
+    @Test
+    void updateTask_taskUpdated_returnsTaskSafeToEdit() {
+        repo.save(TaskTestFactory.taskWithId1());
+
+        Task task = useCase.execute("1", "New title");
+
+        task.setTitle("Title1");
+
+        Task fromRepo = repo.findById("1").orElseThrow();
+
+        assertEquals("New title", fromRepo.getTitle());
     }
 
     @Test

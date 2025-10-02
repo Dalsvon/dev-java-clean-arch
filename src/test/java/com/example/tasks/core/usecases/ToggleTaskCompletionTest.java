@@ -71,6 +71,20 @@ public class ToggleTaskCompletionTest {
     }
 
     @Test
+    void toggleCompletionTask_taskUpdated_returnsTaskSafeToEdit() {
+        repo.save(TaskTestFactory.taskWithId1());
+
+        Task task = useCase.execute("1");
+
+        task.toggleCompleted();
+
+        Task fromRepo = repo.findById("1").orElseThrow();
+
+        assertTrue(fromRepo.isCompleted());
+        assertFalse(task.isCompleted());
+    }
+
+    @Test
     void toggleCompletionTask_noId_throwsIllegalArgumentException() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             useCase.execute(null);
