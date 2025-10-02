@@ -24,6 +24,8 @@ public class Task {
     }
     public boolean isCompleted() { return completed; }
     public void toggleCompleted() { this.completed = !this.completed; }
+
+    // I added this method to create safe copies to avoid unintended changes in the database
     public Task copy() {
         Task task = new Task(getId(), getTitle());
         task.completed = completed;

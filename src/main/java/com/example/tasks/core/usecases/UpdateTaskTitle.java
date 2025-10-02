@@ -6,7 +6,7 @@ import com.example.tasks.core.entities.Task;
 import java.util.Optional;
 
 /**
- * Class for updating title of a Task
+ * Class for updating title of a task in given repository
  *
  * @author Dalibor Svonavec
  */
@@ -21,6 +21,8 @@ public class UpdateTaskTitle {
     }
 
     public Task execute(String id, String title) {
+        // It would be good to disallow empty ID strings or use other ID type, but since CreateTask allows them,
+        // I also allowed them
         if (id == null) {
             throw new IllegalArgumentException("Task ID is required");
         }

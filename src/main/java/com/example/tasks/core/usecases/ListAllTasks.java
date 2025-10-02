@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Lists all tasks in given repository
+ * Class for listing all tasks in given repository
  *
  * @author Dalibor Svonavec
  */
